@@ -1,35 +1,20 @@
 import React from "react";
+import { TextField, Button, Box } from "@mui/material";
 
 function TodoInput({ task, setTask, addTask }) {
   return (
-    <div style={{ marginBottom: "20px" }}>
-      <input
-        type="text"
-        placeholder="Enter a task"
+    <Box display="flex" gap={2} mt={2}>
+      <TextField
+        variant="outlined"
+        label="Enter a task"
         value={task}
         onChange={(e) => setTask(e.target.value)}
-        style={{
-          padding: "10px",
-          width: "250px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-          marginRight: "10px",
-        }}
+        fullWidth
       />
-      <button
-        onClick={addTask}
-        style={{
-          padding: "10px 15px",
-          backgroundColor: "#0078ff",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        Add Task
-      </button>
-    </div>
+      <Button variant="contained" color="primary" onClick={addTask}>
+        Add
+      </Button>
+    </Box>
   );
 }
 

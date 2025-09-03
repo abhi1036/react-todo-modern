@@ -1,0 +1,27 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #222;
+  --card-color: #fff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #f8f9fa;
+  --card-color: #1e1e1e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+.todo-card {
+  background-color: var(--card-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+}

@@ -1,51 +1,55 @@
 import React from "react";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Checkbox,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function TodoList({ tasks, setTasks }) {
-  const toggleComplete = (index) => {
-    const newTasks = [...tasks];
-    newTasks[index].completed = !newTasks[index].completed;
-    setTasks(newTasks);
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
+  // Toggle completion
+  const toggleTask = (index) => {
+    const updatedTasks = tasks.map((task, i) =>
+      i === index ? { ...task, completed: !task.completed } : task
+    );
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
+  // Delete task
   const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   return (
-    <ul style={{ listStyle: "none", padding: 0 }}>
-      {tasks.map((t, index) => (
-        <li
+    <List>
+      {tasks.map((task, index) => (
+        <ListItem
           key={index}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            backgroundColor: "#f8f9fa",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "10px",
-            textDecoration: t.completed ? "line-through" : "none",
-            color: t.completed ? "#888" : "#000",
-          }}
+          secondaryAction={
+            <IconButton edge="end" onClick={() => deleteTask(index)}>
+              <DeleteIcon />
+            </IconButton>
+          }
         >
-          <span>{t.text}</span>
-          <div>
-            <button
-              onClick={() => toggleComplete(index)}
-              style={{ marginRight: "10px", cursor: "pointer" }}
-            >
-              {t.completed ? "✔️" : "✅"}
-            </button>
-            <button onClick={() => deleteTask(index)} style={{ cursor: "pointer" }}>
-              ❌
-            </button>
-          </div>
-        </li>
+          <Checkbox
+            checked={task.completed}
+            onChange={() => toggleTask(index)}
+          />
+          <ListItemText
+            primary={task.text}
+            style={{
+              textDecoration: task.completed ? "line-through" : "none",
+              color: task.completed ? "gray" : "black",
+            }}
+          />
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 }
 

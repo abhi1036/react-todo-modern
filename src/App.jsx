@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
+import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
 
-  // Load tasks from localStorage on first render
+  // Fetch tasks from backend
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    setTasks(savedTasks);
+    axios.get("http://localhost:5000/tasks")
+      .then((res) => setTasks(res.data))
+      .catch((err) => console.error("Error fetching tasks:", err));
   }, []);
 
   const addTask = () => {
     if (task.trim() === "") return;
-    const newTasks = [...tasks, { text: task, completed: false }];
-    setTasks(newTasks);
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
+    axios.post("http://localhost:5000/tasks", { text: task })
+      .then((res) => setTasks([...tasks, res.data]))
+      .catch((err) => console.error("Error adding task:", err));
     setTask("");
   };
 
