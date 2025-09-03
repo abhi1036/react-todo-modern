@@ -1,20 +1,27 @@
-import React from "react";
-import { TextField, Button, Box } from "@mui/material";
+import React, { useState } from "react";
 
-function TodoInput({ task, setTask, addTask }) {
+function TodoInput({ addTask }) {
+  const [task, setTask] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addTask(task);
+    setTask("");
+  };
+
   return (
-    <Box display="flex" gap={2} mt={2}>
-      <TextField
-        variant="outlined"
-        label="Enter a task"
+    <form onSubmit={handleSubmit} style={{ display: "flex", marginBottom: "20px" }}>
+      <input
+        type="text"
         value={task}
         onChange={(e) => setTask(e.target.value)}
-        fullWidth
+        placeholder="Add new task..."
+        style={{ flex: 1, padding: "10px", borderRadius: "8px 0 0 8px", border: "1px solid #ccc" }}
       />
-      <Button variant="contained" color="primary" onClick={addTask}>
+      <button type="submit" style={{ padding: "10px 15px", borderRadius: "0 8px 8px 0", border: "none", backgroundColor: "#007bff", color: "white" }}>
         Add
-      </Button>
-    </Box>
+      </button>
+    </form>
   );
 }
 

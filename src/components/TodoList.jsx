@@ -1,55 +1,70 @@
-import React from "react";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  Checkbox,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React, { useState } from "react";
 
-function TodoList({ tasks, setTasks }) {
-  // Toggle completion
-  const toggleTask = (index) => {
-    const updatedTasks = tasks.map((task, i) =>
-      i === index ? { ...task, completed: !task.completed } : task
-    );
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+function TodoList({ tasks, updateTask, deleteTask }) {
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
+
+  const startEditing = (task) => {
+    setEditingId(task._id);
+    setEditingText(task.text);
   };
 
-  // Delete task
-  const deleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  const saveEdit = (id) => {
+    updateTask(id, { text: editingText });
+    setEditingId(null);
+    setEditingText("");
   };
 
   return (
-    <List>
-      {tasks.map((task, index) => (
-        <ListItem
-          key={index}
-          secondaryAction={
-            <IconButton edge="end" onClick={() => deleteTask(index)}>
-              <DeleteIcon />
-            </IconButton>
-          }
+    <ul style={{ listStyle: "none", padding: 0 }}>
+      {tasks.map((task) => (
+        <li
+          key={task._id}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "10px",
+            background: "#f8f9fa",
+            padding: "10px",
+            borderRadius: "8px",
+          }}
         >
-          <Checkbox
+          <input
+            type="checkbox"
             checked={task.completed}
-            onChange={() => toggleTask(index)}
+            onChange={() => updateTask(task._id, { completed: !task.completed })}
+            style={{ marginRight: "10px" }}
           />
-          <ListItemText
-            primary={task.text}
-            style={{
-              textDecoration: task.completed ? "line-through" : "none",
-              color: task.completed ? "gray" : "black",
-            }}
-          />
-        </ListItem>
+          {editingId === task._id ? (
+            <input
+              value={editingText}
+              onChange={(e) => setEditingText(e.target.value)}
+              style={{ flex: 1, padding: "5px" }}
+            />
+          ) : (
+            <span style={{ flex: 1, textDecoration: task.completed ? "line-through" : "none" }}>
+              {task.text}
+            </span>
+          )}
+
+          {editingId === task._id ? (
+            <button onClick={() => saveEdit(task._id)} style={{ marginLeft: "10px" }}>
+              Save
+            </button>
+          ) : (
+            <button onClick={() => startEditing(task)} style={{ marginLeft: "10px" }}>
+              Edit
+            </button>
+          )}
+          <button
+            onClick={() => deleteTask(task._id)}
+            style={{ marginLeft: "10px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "5px", padding: "5px 10px" }}
+          >
+            Delete
+          </button>
+        </li>
       ))}
-    </List>
+    </ul>
   );
 }
 
