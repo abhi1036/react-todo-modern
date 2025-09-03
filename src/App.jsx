@@ -4,7 +4,7 @@ import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import "./App.css";
+import "./app.css";
 
 const API_URL = "https://todo-backend-1-n9vk.onrender.com";
 
